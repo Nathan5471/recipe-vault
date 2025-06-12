@@ -14,6 +14,7 @@ export default function setupDatabase() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
+            account_type TEXT NOT NULL CHECK(account_type IN ('admin', 'user')),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`)
 
@@ -31,4 +32,12 @@ export default function setupDatabase() {
             user_id INTEGER,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )`)
+
+    db.close((error) => {
+        if (error) {
+            console.error('Error closing database:', error.message);
+        } else {
+            console.log('Database connection closed.');
+        }
+    })
 }
