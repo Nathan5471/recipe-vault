@@ -9,12 +9,14 @@ export default function setupDatabase() {
         }
     });
 
+    // favorite_recipes should be stored in the format [recipeId1, recipeId2, ...]
     db.run(`
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             account_type TEXT NOT NULL CHECK(account_type IN ('admin', 'user')),
+            favorite_recipes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`)
 
