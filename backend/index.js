@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
@@ -8,6 +9,10 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(cors({
+    origin: true,
+    credentials: true,
+}))
 app.use(cookieParser());
 app.use('/api/auth', authRouter);
 

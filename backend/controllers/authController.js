@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
                     db.close();
                     return res.status(409).json({ message: 'User already exists' });
                 }
-                res.status(201).json({ message: 'User registered successfully', userId: this.lastId });
+                res.status(201).json({ message: 'User registered successfully' });
                 db.close();
             })
         });

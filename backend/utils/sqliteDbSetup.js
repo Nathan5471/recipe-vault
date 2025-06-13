@@ -33,10 +33,17 @@ export default function setupDatabase() {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             user_id INTEGER,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`)
+        )`, (error) => {
+            if (error) {
+                console.error('Error creating recipes table:', error.message);
+                db.close();
+                return;
+            }
+            db.run(`CREATE INDEX IF NOT EXISTS index_recipes_title ON recipes(title)`);
+            db.run(`CREATE INDEX IF NOT EXISTS index_recipes_user_id ON recipes(user_id)`);
+        })
 
-    db.run(`CREATE INDEX IF NOT EXISTS index_recipes_title ON recipes(title)`);
-    db.run(`CREATE INDEX IF NOT EXISTS index_recipes_user_id ON recipes(user_id)`);
+    
 
     db.close((error) => {
         if (error) {

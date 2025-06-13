@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/register', (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' });
+        return res.status(400).json({ message: 'Username and password are required' });
     }
     registerUser(req, res);
 })
@@ -15,7 +15,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' });
+        return res.status(400).json({ message: 'Username and password are required' });
     }
     loginUser(req, res);
 })
@@ -39,23 +39,23 @@ router.put('/update', authenticate, (req, res) => {
     if (toUpdate === 'username') {
         const { newUsername } = req.body;
         if (!newUsername) {
-            return res.status(400).json({ error: 'New username is required' });
+            return res.status(400).json({ message: 'New username is required' });
         }
         updateUsername(req, res);
     } else if (toUpdate === 'password') {
         const { newPassword } = req.body;
         if (!newPassword) {
-            return res.status(400).json({ error: 'New password is required' });
+            return res.status(400).json({ message: 'New password is required' });
         }
         updatePassword(req, res);
     } else if (toUpdate === 'account_type') {
         const { userIdToUpdate, newAccountType } = req.body;
         if (!userIdToUpdate || !newAccountType) {
-            return res.status(400).json({ error: 'User ID and new account type are required' });
+            return res.status(400).json({ message: 'User ID and new account type are required' });
         }
         updateAccountType(req, res);
     } else {
-        return res.status(400).json({ error: 'Invalid update type' });
+        return res.status(400).json({ message: 'Invalid update type' });
     }
 })
 
