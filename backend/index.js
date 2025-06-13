@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
 import authRouter from './routes/authRouter.js';
@@ -15,6 +16,10 @@ app.use(cors({
 }))
 app.use(cookieParser());
 app.use('/api/auth', authRouter);
+app.use('/', createProxyMiddleware({
+    target: 'http://localhost:5173',
+    changeOrigin: true,
+}));
 
 try {
     app.listen(PORT, () => {
