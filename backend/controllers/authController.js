@@ -17,7 +17,7 @@ export const registerUser = async (req, res) => {
             if (row.count === 0) {
                 accountType = 'admin'; // First user is an admin
             }
-            db.run(`INSERT INTO users (username, password, account_type) VALUES (?, ?, ?)`, [username, hashedPassword, accountType], function(error) {
+            db.run(`INSERT INTO users (username, password, account_type) VALUES (?, ?, ?)`, [username, hashedPassword, accountType], (error) => {
                 if (error) {
                     console.error('Error inserting user:', error.message);
                     db.close();
