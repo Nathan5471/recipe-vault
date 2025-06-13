@@ -25,3 +25,17 @@ export const login = async (username, password) => {
         return response.data;
     }
 }
+
+export const logout = async () => {
+    const response = await api.post('/logout');
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
+export const getCurrentUser = async () => {
+    const response = await api.get('/');
+    if (response.status === 200) {
+        return response.data;
+    }
+}

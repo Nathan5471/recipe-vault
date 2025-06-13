@@ -106,7 +106,7 @@ export const getAllRecipes = (req, res) => {
 }
 
 export const getUserRecipes = (req, res) => {
-    const userId = req.user.id;
+    const userId = req.params.userId
     const db = new sqlite3.Database('data/database.db');
     db.all(`SELECT * FROM recipes WHERE user_id = ?`, [userId], (error, rows) => {
         if (error) {

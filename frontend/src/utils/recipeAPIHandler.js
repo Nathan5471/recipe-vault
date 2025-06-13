@@ -23,3 +23,10 @@ export const createRecipe = async (title, ingredients, instructions, description
         return response.data;
     }
 }
+
+export const getUserRecipes = async (userId) => {
+    const response = await api.get(`/user/${userId}`);
+    if (response.status === 200) {
+        return response.data;
+    }
+}

@@ -20,8 +20,10 @@ export default function CreateRecipe() {
             if (response) {
                 alert('Recipe created successfully!');
                 setTitle('');
-                setIngredients('');
+                setIngredients([{ name: '', quantity: '', unit: '' }]);
+                setIngredientsLength(1);
                 setInstructions('');
+                setInstructionsLength(1);
                 setDescription('');
             }
         } catch (error) {

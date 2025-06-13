@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateRecipe from './pages/CreateRecipe';
+import MyRecipes from './pages/MyRecipes';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/create" element={<CreateRecipe />} />
+        <Route path="/myrecipes" element={<MyRecipes />} />
       </Routes>
     </Router>
   )
