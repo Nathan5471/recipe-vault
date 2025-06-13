@@ -26,7 +26,7 @@ router.post('/logout', (req, res) => {
 
 router.get('/', authenticate, (req, res) => {
     // Remove the user's hashed password from the response
-    const user = { id: req.user.id, username: req.user.username, account_type: req.user.account_type };
+    const user = { id: req.user.id, username: req.user.username, account_type: req.user.account_type, favorite_recipes: req.user.favorite_recipes };
     res.status(200).json(user);
 })
 

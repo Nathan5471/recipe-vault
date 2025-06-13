@@ -43,15 +43,16 @@ export default function MyRecipes() {
             <Navbar />
             <div className="flex flex-col items-center justify-center mt-10">
                 <h1 className="text-4xl mb-6">My Recipes</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-screen-xl px-4">
+                
                     {recipes.length > 0 ? (
-                        recipes.map(recipe => (
-                            <RecipeCard key={recipe.id} recipe={recipe} />
-                        ))
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full max-w-screen-xl px-4">
+                            {recipes.map(recipe => (
+                                <RecipeCard key={recipe.id} recipe={recipe} startingIsFavorite={user.favorite_recipes.includes(recipe.id)} />
+                            ))}
+                        </div>
                     ) : (
                         <p className="text-gray-500">You have no recipes yet. Start creating some!</p>
                     )}
-                </div>
             </div>
         </div>
     )

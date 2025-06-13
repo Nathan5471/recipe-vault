@@ -30,3 +30,10 @@ export const getUserRecipes = async (userId) => {
         return response.data;
     }
 }
+
+export const addRemoveFavorite = async (recipeId) => {
+    const response = await api.post('/addRemoveFavorite', {recipeId});
+    if (response.status === 200) {
+        return response.data;
+    }
+}

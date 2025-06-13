@@ -16,7 +16,7 @@ export default function setupDatabase() {
             username TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
             account_type TEXT NOT NULL CHECK(account_type IN ('admin', 'user')),
-            favorite_recipes TEXT,
+            favorite_recipes TEXT NOT NULL DEFAULT '[]',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`)
 
@@ -30,8 +30,8 @@ export default function setupDatabase() {
             description TEXT NOT NULL,
             ingredients TEXT NOT NULL,
             instructions TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             user_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )`, (error) => {
             if (error) {
