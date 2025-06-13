@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseURL = window.location.origin
+
 const api = axios.create({
-    baseURL: 'api/recipes',
+    baseURL: `${baseURL}/api/recipes`,
     withCredentials: true,
 });
 
@@ -26,6 +28,22 @@ export const createRecipe = async (title, ingredients, instructions, description
 
 export const getUserRecipes = async (userId) => {
     const response = await api.get(`/user/${userId}`);
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
+export const searchRecipes = async (query) => {
+    console.log('Searching for recipes with query:', query);
+    const response = await api.get(`/search/${query}`);
+    console.log('Search response:', response);
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
+export const getFavorites = async () => {
+    const response = await api.get('/favorites');
     if (response.status === 200) {
         return response.data;
     }

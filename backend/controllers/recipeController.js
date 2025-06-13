@@ -122,13 +122,13 @@ export const getUserRecipes = (req, res) => {
 export const searchRecipes = (req, res) => {
     const { query } = req.params;
     const db = new sqlite3.Database('data/database.db');
-    db.all(`SELECT * FROM recipes WHERE title LIKE ?`, [`%${query}%`], (error, rows) => {
+    db.all(`SELECT * FROM recipes WHERE title LIKE ?`, [`%${query}%`], (error, recipes) => {
         if (error) {
             console.error('Error searching recipes:', error.message);
             db.close();
             return res.status(500).json({ message: 'Failed to search recipes' });
         }
-        res.status(200).json(rows);
+        res.status(200).json(recipes);
         db.close();
     })
 }
