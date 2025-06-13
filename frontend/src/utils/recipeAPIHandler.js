@@ -1,0 +1,25 @@
+import axios from 'axios';
+
+const api = axios.create({
+    baseURL: 'api/recipes',
+    withCredentials: true,
+});
+
+api.interceptors.response.use(
+    response => response,
+    error => {
+        return Promise.reject(error.response ? error.response.data : 'Network Error');
+    }
+);
+
+export const createRecipe = async (title, ingredients, instructions, description) => {
+    const response = await api.post('/create', {
+        title,
+        ingredients,
+        instructions,
+        description
+    });
+    if (response.status === 201) {
+        return response.data;
+    }
+}

@@ -1,8 +1,7 @@
 import express from 'express';
 import authenticate from '../middleware/authenticate.js';
-import { createRecipe, updateRecipe, deleteRecipes, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
-import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier';
-import { get } from 'mongoose';
+import { createRecipe, updateRecipe, deleteRecipe, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
+import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier.js';
 
 const router = express.Router();
 
@@ -39,16 +38,16 @@ router.delete('/delete', authenticate, (req, res) => {
     if (!id) {
         return res.status(400).json({ message: 'ID is required' });
     }
-    deleteRecipes(req, res);
+    deleteRecipe(req, res);
 })
 
-router.get('/:id'), (req, res) => {
+router.get('/:id', (req, res) => {
     const { id } = req.params;
     if (!id) {
         return res.status(400).json({ message: 'ID is required' });
     }
     getRecipeById(req, res);
-}
+})
 
 router.get('/all/:limit', (req, res) => {
     const { limit } = req.params;
@@ -85,3 +84,5 @@ router.post('/addRemoveFavorite', authenticate, (req, res) => {
     }
     addRemoveFavorite(req, res);
 })
+
+export default router;

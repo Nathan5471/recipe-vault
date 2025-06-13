@@ -5,6 +5,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
 import authRouter from './routes/authRouter.js';
+import recipeRouter from './routes/recipeRouter.js';
 
 const app = express();
 const PORT = 3000;
@@ -16,6 +17,7 @@ app.use(cors({
 }))
 app.use(cookieParser());
 app.use('/api/auth', authRouter);
+app.use('/api/recipes', recipeRouter);
 app.use('/', createProxyMiddleware({
     target: 'http://localhost:5173',
     changeOrigin: true,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {
@@ -6,7 +6,7 @@ export default function Navbar() {
         <nav className="bg-blue-500 p-4">
             <div className="container mx-auto flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">
-                    <Link to="/" className="text-white hover:text-gray-200">MyApp</Link>
+                    <Link to="/" className="text-white hover:text-gray-200">Recipe Vault</Link>
                 </h1>
                 <input
                     type="text"
@@ -14,8 +14,9 @@ export default function Navbar() {
                     className="p-2 bg-white rounded-lg border border-gray-300 w-[calc(50%)]"
                 />
                 <div className="flex space-x-4">
+                    <Link to="/create" className="text-white hover:text-gray-200">Create Recipe</Link>
                     <Link to="/myrecipes" className="text-white hover:text-gray-200">My Recipes</Link>
-                    <Link to="/profile" className="text-white hover:text-gray-200">Profile</Link>
+                    <Link to="/settings" className="text-white hover:text-gray-200">Settings</Link>
                 </div>
             </div>
         </nav>

@@ -29,7 +29,7 @@ export default function Login() {
                 {error && <div className="text-red-500 mb-4">{error}</div>}
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
-                        <label className="block text-gray-700  text-lg mb-2" htmlFor="username">Username</label>
+                        <label className="block text-gray-700  text-lg mb-2">Username</label>
                         <input
                             type="text"
                             id="username"
@@ -40,7 +40,7 @@ export default function Login() {
                     
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-lg mb-2" htmlForm="password">Password</label>
+                        <label className="block text-gray-700 text-lg mb-2">Password</label>
                         <input
                             type="password"
                             id="password"
