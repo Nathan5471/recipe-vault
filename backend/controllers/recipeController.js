@@ -1,11 +1,10 @@
 import sqlite3 from 'sqlite3';
 
 export const createRecipe = (req, res) => {
-    const { title, ingredients, instructions } = req.body;
-    const description = req.body.description || '';
+    const { title, description, ingredients, instructions } = req.body;
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
-    db.run(`INSERT INTO recipes (title, ingredients, instructions, description, user_id) VALUES (?, ?, ?, ?, ?)`, [title, ingredients, instructions, description, userId], (error) => {
+    const db = new sqlite3.Database('data/database.db');
+    db.run(`INSERT INTO recipes (title, description, ingredients, instructions, user_id) VALUES (?, ?, ?, ?, ?)`, [title, description, ingredients, instructions, userId], (error) => {
         if (error) {
             console.error('Error inserting recipe:', error.message);
             db.close();
@@ -17,10 +16,9 @@ export const createRecipe = (req, res) => {
 }
 
 export const updateRecipe = (req, res) => {
-    const { id, title, ingredients, instructions } = req.body;
-    const description = req.body.description || '';
+    const { id, title, description, ingredients, instructions } = req.body;
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
         if (error) {
             console.error('Error fetching recipe:', error.message);
@@ -35,7 +33,7 @@ export const updateRecipe = (req, res) => {
             db.close();
             return res.status(403).json({ message: 'You do not have permission to update this recipe' });
         }
-        db.run(`UPDATE recipes SET title = ?, ingredients = ?, instructions = ?, description = ? WHERE id = ?`, [title, ingredients, instructions, description, id], (error) => {
+        db.run(`UPDATE recipes SET title = ?, description = ?, ingredients = ?, instructions = ?  WHERE id = ?`, [title, ingredients, instructions, description, id], (error) => {
             if (error) {
                 console.error('Error updating recipe:', error.message);
                 db.close();
@@ -50,7 +48,7 @@ export const updateRecipe = (req, res) => {
 export const deleteRecipe = (req, res) => {
     const { id } = req.body;
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
         if (error) {
             console.error('Error fetching recipe:', error.message);
@@ -77,7 +75,7 @@ export const deleteRecipe = (req, res) => {
 
 export const getRecipeById = (req, res) => {
     const { id } = req.params;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
         if (error) {
             console.error('Error fetching recipe:', error.message);
@@ -95,7 +93,7 @@ export const getRecipeById = (req, res) => {
 
 export const getAllRecipes = (req, res) => {
     const { limit } = req.params;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.all(`SELECT * FROM recipes LIMIT ?`, [limit], (error, rows) => {
         if (error) {
             console.error('Error fetching recipes:', error.message);
@@ -109,7 +107,7 @@ export const getAllRecipes = (req, res) => {
 
 export const getUserRecipes = (req, res) => {
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.all(`SELECT * FROM recipes WHERE user_id = ?`, [userId], (error, rows) => {
         if (error) {
             console.error('Error fetching user recipes:', error.message);
@@ -123,7 +121,7 @@ export const getUserRecipes = (req, res) => {
 
 export const searchRecipes = (req, res) => {
     const { query } = req.params;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.all(`SELECT * FROM recipes WHERE title LIKE ?`, [`%${query}%`], (error, rows) => {
         if (error) {
             console.error('Error searching recipes:', error.message);
@@ -137,7 +135,7 @@ export const searchRecipes = (req, res) => {
 
 export const getUserFavorites = (req, res) => {
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT favorite_recipes FROM users WHERE id = ?`, [userId], (error, row) => {
         if (error) {
             console.error('Error fetching user favorites:', error.message);
@@ -164,7 +162,7 @@ export const getUserFavorites = (req, res) => {
 export const addRemoveFavorite = (req, res) => {
     const { recipeId } = req.body;
     const userId = req.user.id;
-    const db = new sqlite3.Database('recipes.db');
+    const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT favorite_recipes FROM users WHERE id = ?`, [userId], (error, row) => {
         if (error) {
             console.error('Error fetching user favorites:', error.message);

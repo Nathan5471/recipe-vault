@@ -27,7 +27,7 @@ export default function setupDatabase() {
         CREATE TABLE IF NOT EXISTS recipes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
-            description TEXT,
+            description TEXT NOT NULL,
             ingredients TEXT NOT NULL,
             instructions TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

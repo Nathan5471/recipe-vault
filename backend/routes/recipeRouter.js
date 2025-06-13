@@ -6,8 +6,8 @@ import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier.j
 const router = express.Router();
 
 router.post('/create', authenticate, (req, res) => {
-    const { title, ingredients, instructions } = req.body;
-    if (!title || !ingredients || !instructions) {
+    const { title, description, ingredients, instructions } = req.body;
+    if (!title || !description || !ingredients || !instructions) {
         return res.status(400).json({ message: 'Title, ingredients, and instructions are required' });
     }
     if (!verifyIngredients(ingredients)) {
@@ -20,8 +20,8 @@ router.post('/create', authenticate, (req, res) => {
 })
 
 router.put('/update', authenticate, (req, res) => {
-    const { id, title, ingredients, instructions } = req.body;
-    if (!id || !title || !ingredients || !instructions) {
+    const { id, title, description, ingredients, instructions } = req.body;
+    if (!id || !title || !description || !ingredients || !instructions) {
         return res.status(400).json({ message: 'ID, title, ingredients, and instructions are required' });
     }
     if (!verifyIngredients(ingredients)) {
