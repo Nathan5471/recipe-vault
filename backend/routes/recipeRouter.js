@@ -1,7 +1,8 @@
 import express from 'express';
 import authenticate from '../middleware/authenticate.js';
-import { createRecipe, updateRecipe, deleteRecipes } from '../controllers/recipeController.js';
+import { createRecipe, updateRecipe, deleteRecipes, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
 import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier';
+import { get } from 'mongoose';
 
 const router = express.Router();
 
@@ -42,21 +43,45 @@ router.delete('/delete', authenticate, (req, res) => {
 })
 
 router.get('/:id'), (req, res) => {
-    // IMPLEMENT
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ message: 'ID is required' });
+    }
+    getRecipeById(req, res);
 }
 
 router.get('/all/:limit', (req, res) => {
-    // IMPLEMENT
+    const { limit } = req.params;
+    if (!limit || isNaN(limit)) {
+        return res.status(400).json({ message: 'Limit must be a valid number' });
+    }
+    getAllRecipes(req, res);
+})
+
+router.get('/user/:userId', (req, res) => {
+    const { userId } = req.params;
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+    getUserRecipes(req, res);
 })
 
 router.get('/search/:query', (req, res) => {
-    // IMPLEMENT
+    const { query } = req.params;
+    if (!query) {
+        return res.status(400).json({ message: 'Search query is required' });
+    }
+    searchRecipes(req, res);
 })
 
-router.get('/favorites', (req, res) => {
-    // IMPLEMENT
+router.get('/favorites', authenticate, (req, res) => {
+    getUserFavorites(req, res);
 })
 
-router.post('/addRemoveFavorite', (req, res) => {
-    // IMPLEMENT
+router.post('/addRemoveFavorite', authenticate, (req, res) => {
+    const { recipeId } = req.body;
+    if (!recipeId) {
+        return res.status(400).json({ message: 'Recipe ID is required' });
+    }
+    addRemoveFavorite(req, res);
 })

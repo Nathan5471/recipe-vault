@@ -35,6 +35,9 @@ export default function setupDatabase() {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )`)
 
+    db.run(`CREATE INDEX IF NOT EXISTS index_recipes_title ON recipes(title)`);
+    db.run(`CREATE INDEX IF NOT EXISTS index_recipes_user_id ON recipes(user_id)`);
+
     db.close((error) => {
         if (error) {
             console.error('Error closing database:', error.message);
