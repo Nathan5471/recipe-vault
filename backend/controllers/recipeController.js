@@ -134,29 +134,17 @@ export const searchRecipes = (req, res) => {
 }
 
 export const getUserFavorites = (req, res) => {
-    const userId = req.user.id;
+    const favoriteRecipes = JSON.parse(req.user.favorite_recipes);
     const db = new sqlite3.Database('data/database.db');
-    db.get(`SELECT favorite_recipes FROM users WHERE id = ?`, [userId], (error, row) => {
+    db.all(`SELECT * FROM recipes WHERE id IN (${favoriteRecipes.join(',')})`, (error, recipes) => {
         if (error) {
-            console.error('Error fetching user favorites:', error.message);
+            console.error('Error fetching favorite recipes:', error.message);
             db.close();
-            return res.status(500).json({ message: 'Failed to fetch user favorites' });
+            return res.status(500).json({ message: 'Failed to fetch favorite recipes' });
         }
-        if (!row) {
-            db.close();
-            return res.status(404).json({ message: 'User not found' });
-        }
-        const favoriteRecipes = row.favorite_recipes ? JSON.parse(row.favorite_recipes) : [];
-        db.all(`SELECT * FROM recipes WHERE id IN (${favoriteRecipes.join(',')})`, (error, recipes) => {
-            if (error) {
-                console.error('Error fetching favorite recipes:', error.message);
-                db.close();
-                return res.status(500).json({ message: 'Failed to fetch favorite recipes' });
-            }
-            res.status(200).json(recipes);
-            db.close();
-        });
-    })
+        res.status(200).json(recipes);
+        db.close();
+    });
 }
 
 export const addRemoveFavorite = (req, res) => {

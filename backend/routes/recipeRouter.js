@@ -41,6 +41,10 @@ router.delete('/delete', authenticate, (req, res) => {
     deleteRecipe(req, res);
 })
 
+router.get('/favorites', authenticate, (req, res) => {
+    getUserFavorites(req, res);
+})
+
 router.get('/:id', (req, res) => {
     const { id } = req.params;
     if (!id) {
@@ -73,9 +77,6 @@ router.get('/search/:query', (req, res) => {
     searchRecipes(req, res);
 })
 
-router.get('/favorites', authenticate, (req, res) => {
-    getUserFavorites(req, res);
-})
 
 router.post('/addRemoveFavorite', authenticate, (req, res) => {
     const { recipeId } = req.body;
