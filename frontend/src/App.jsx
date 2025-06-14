@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateRecipe from './pages/CreateRecipe';
 import MyRecipes from './pages/MyRecipes';
+import Favorites from './pages/Favorites'
 import Search from './pages/Search';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/create" element={<CreateRecipe />} />
         <Route path="/myrecipes" element={<MyRecipes />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="/search/:query" element={<Search />} />
       </Routes>
     </Router>
