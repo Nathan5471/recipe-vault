@@ -9,7 +9,8 @@ import CreateRecipe from './pages/CreateRecipe';
 import MyRecipes from './pages/MyRecipes';
 import Favorites from './pages/Favorites'
 import Search from './pages/Search';
-import Settings from './pages/Settings'
+import Settings from './pages/Settings';
+import Overlay from './components/Overlay';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    <Overlay />
     </OverlayProvider>
   )
 }
