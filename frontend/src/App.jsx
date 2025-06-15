@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { OverlayProvider } from './contexts/OverlayContext';
 import AuthenticatedRoute from './utils/AuthenticatedRoute';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -12,6 +13,7 @@ import Settings from './pages/Settings'
 
 function App() {
   return (
+    <OverlayProvider>
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -26,6 +28,7 @@ function App() {
         </Route>
       </Routes>
     </Router>
+    </OverlayProvider>
   )
 }
 

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useOverlayContext } from '../contexts/OverlayContext';
 import { getCurrentUser } from '../utils/authAPIHandler';
 import Navbar from '../components/Navbar';
+import Overlay from '../components/Overlay'
 
 export default function Settings() {
+    const { openOverlay } = useOverlayContext();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
