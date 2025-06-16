@@ -2,7 +2,7 @@ import sqlite3 from 'sqlite3';
 
 export const createRecipe = (req, res) => {
     const { title, description, ingredients, instructions } = req.body;
-    const imagePath = req.file.path;
+    const imagePath = req.file.path.slice(5);
     const userId = req.user.id;
     const db = new sqlite3.Database('data/database.db');
     db.run(`INSERT INTO recipes (title, description, ingredients, instructions, image_url, user_id) VALUES (?, ?, ?, ?, ?, ?)`, [title, description, ingredients, instructions, imagePath, userId], (error) => {
@@ -75,6 +75,52 @@ export const deleteRecipe = (req, res) => {
     })
 }
 
+export const getRecipeAmount = (req, res) => {
+    const db = new sqlite3.Database('data/database.db');
+    db.get(`SELECT COUNT(*) as count FROM recipes`, (error, row) => {
+        if (error) {
+            consoler.error('Error fetching recipe count:', error.message);
+            db.close();
+            return res.status(500).json({ message: 'Failed to fetch recipe count' });
+        }
+        res.status(200).json({ count: row.count });
+        db.close();
+    })
+}
+
+export const getUserRecipeAmount = (req, res) => {
+    const userId = req.params.userId;
+    const db = new sqlite3.Database('data/database.db');
+    db.get(`SELECT COUNT(*) as count FROM recipes WHERE user_id = ?`, [userId], (error, row) => {
+        if (error) {
+            console.error('Error fetching user recipe count:', error.message);
+            db.close();
+            return res.status(500).json({ message: 'Failed to fetch user recipe count' });
+        }
+        res.status(200).json({ count: row.count });
+        db.close();
+    })
+}
+
+export const getUserFavoriteRecipeAmount = (req, res) => {
+    const userId = req.user.id;
+    const db = new sqlite3.Database('data/database.db');
+    db.get(`SELECT favorite_recipes FROM users WHERE id = ?`, [userId], (error, row) => {
+        if (error) {
+            consoler.error('Error fetching user favorite recipe count:', error.message);
+            db.close();
+            return res.status(500).json({ message: 'Failed to fetch user favorite recipe count' });
+        }
+        if (!row) {
+            db.close();
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const favoriteRecipes = row.favorite_recipes ? JSON.parse(row.favorite_recipes) : [];
+        res.status(200).json({ count: favoriteRecipes.length });
+        db.close();
+    })
+}
+
 export const getRecipeById = (req, res) => {
     const { id } = req.params;
     const db = new sqlite3.Database('data/database.db');
@@ -94,21 +140,21 @@ export const getRecipeById = (req, res) => {
 }
 
 export const getAllRecipes = (req, res) => {
-    const { limit, sortBy } = req.params;
+    const { limit, sortBy, page } = req.query;
     let sortOptions = [];
-    if (sortBy === 'alphabeticalasc') {
+    if (sortBy === 'alphabetical_asc') {
         sortOptions = ['title', 'ASC'];
-    } else if (sortBy === 'alphabeticaldesc') {
+    } else if (sortBy === 'alphabetical_desc') {
         sortOptions = ['title', 'DESC'];
-    } else if (sortBy === 'recentasc') {
+    } else if (sortBy === 'recent_asc') {
         sortOptions = ['created_at', 'ASC'];
-    } else if (sortBy === 'recentdesc') {
+    } else if (sortBy === 'recent_desc') {
         sortOptions = ['created_at', 'DESC'];
     } else {
         return res.status(400).json({ message: 'Invalid sort type' });
     }
     const db = new sqlite3.Database('data/database.db');
-    db.all(`SELECT * FROM recipes ORDER BY ${sortOptions[0]} ${sortOptions[1]} LIMIT ?`, [limit], (error, rows) => {
+    db.all(`SELECT * FROM recipes ORDER BY ${sortOptions[0]} ${sortOptions[1]} LIMIT ? OFFSET ?`, [limit, limit * page], (error, rows) => {
         if (error) {
             console.error('Error fetching recipes:', error.message);
             db.close();

@@ -1,6 +1,6 @@
 import express from 'express';
 import authenticate from '../middleware/authenticate.js';
-import { createRecipe, updateRecipe, deleteRecipe, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
+import { createRecipe, updateRecipe, deleteRecipe, getRecipeAmount, getUserRecipeAmount, getUserFavoriteRecipeAmount, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
 import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier.js';
 import multer from 'multer';
 
@@ -56,8 +56,40 @@ router.delete('/delete', authenticate, (req, res) => {
     deleteRecipe(req, res);
 })
 
+router.get('/amount', (req, res) => {
+    const { type } = req.query;
+    if (!type) {
+        return res.status(400).json({ message: 'Type is required' });
+    }
+    if (type === 'all') {
+        getRecipeAmount(req, res);
+    } else if (type === 'user') {
+        const { userId } = req.query;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+        getUserRecipeAmount(req, res);
+    } else if (type === 'favorites') {
+        const { userId } = req.query;
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+        getUserFavoriteRecipeAmount(req, res);
+    } else {
+        return res.status(400).json({ message: 'Invalid type' });
+    }
+})
+
 router.get('/favorites', authenticate, (req, res) => {
     getUserFavorites(req, res);
+})
+
+router.get('/all', (req, res) => {
+    const { limit, sortBy, page } = req.query;
+    if (!limit || isNaN(limit) || !sortBy) {
+        return res.status(400).json({ message: 'Limit must be a valid number and sort by is required' });
+    }
+    getAllRecipes(req, res);
 })
 
 router.get('/:id', (req, res) => {
@@ -66,14 +98,6 @@ router.get('/:id', (req, res) => {
         return res.status(400).json({ message: 'ID is required' });
     }
     getRecipeById(req, res);
-})
-
-router.get('/all/:limit/:sortBy', (req, res) => {
-    const { limit, sortBy } = req.params;
-    if (!limit || isNaN(limit) || !sortBy) {
-        return res.status(400).json({ message: 'Limit must be a valid number and sort by is required' });
-    }
-    getAllRecipes(req, res);
 })
 
 router.get('/user/:userId', (req, res) => {

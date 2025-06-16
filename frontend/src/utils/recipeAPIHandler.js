@@ -21,8 +21,22 @@ export const createRecipe = async (formData) => {
     }
 }
 
-export const getAllRecipes = async (limit = 100, sortBy = 'recentdesc') => {
-    const response = await api.get(`/all/${limit}/${sortBy}`);
+export const getAmountOfRecipes = async (type, userId) => {
+    if (type === 'all') {
+        const response = await api.get('/amount', { params: { type } });
+        if (response.status === 200) {
+            return response.data;
+        }
+    } else {
+        const response = await api.get(`/amount/${type}`, { params: { userId } });
+        if (response.status === 200) {
+            return response.data;
+        }
+    }
+}
+
+export const getAllRecipes = async (limit = 100, sortBy = 'recent_desc', page=0) => {
+    const response = await api.get(`/all`, { params: { limit, sortBy, page } });
     if (response.status === 200) {
         return response.data;
     }

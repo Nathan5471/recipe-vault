@@ -7,10 +7,11 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CreateRecipe from './pages/CreateRecipe';
 import MyRecipes from './pages/MyRecipes';
-import Favorites from './pages/Favorites'
+import Favorites from './pages/Favorites';
+import AllRecipes from './pages/AllRecipes';
 import Search from './pages/Search';
 import Settings from './pages/Settings';
-import ManageAccounts from './pages/ManageAccounts'
+import ManageAccounts from './pages/ManageAccounts';
 import Overlay from './components/Overlay';
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/create" element={<CreateRecipe />} />
           <Route path="/myrecipes" element={<MyRecipes />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/all" element={<AllRecipes />} />
           <Route path="/search/:query" element={<Search />} />
           <Route path="/settings" element={<Settings />} />
         </Route>

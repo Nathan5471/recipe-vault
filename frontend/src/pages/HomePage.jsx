@@ -28,7 +28,7 @@ export default function HomePage() {
                     }
                     setMyRecipes(response2)
                 }
-                const response3 = await getAllRecipes(5, 'recentdesc');
+                const response3 = await getAllRecipes(5, 'recent_desc');
                 setFavoriteRecipes(response1)
                 setRecentRecipes(response3);
             } catch (error) {
