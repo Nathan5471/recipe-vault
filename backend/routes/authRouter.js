@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerUser, loginUser, logoutUser, deleteUser, updateUsername, updatePassword, updateAccountType, getAllUsers } from '../controllers/authController.js';
+import { registerUser, loginUser, logoutUser, deleteUser, deleteUserAdmin, updateUsername, updatePassword, updateAccountType, getAllUsers } from '../controllers/authController.js';
 import authenticate from '../middleware/authenticate.js';
 
 const router = express.Router();
@@ -32,6 +32,10 @@ router.get('/', authenticate, (req, res) => {
 
 router.delete('/delete', authenticate, (req, res) => {
     deleteUser(req, res);
+})
+
+router.delete('/admin/delete/:id', authenticate, (req, res) => {
+    deleteUserAdmin(req, res);
 })
 
 router.put('/update', authenticate, (req, res) => {

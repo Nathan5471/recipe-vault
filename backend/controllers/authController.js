@@ -82,6 +82,23 @@ export const deleteUser = (req, res) => {
     })
 }
 
+export const deleteUserAdmin = (req, res) => {
+    const userId = req.params.id;
+    if (req.user.account_type !== 'admin') {
+        return res.status(403).json({ message: 'Only admins can delete users' });
+    }
+    const db = new sqlite3.Database('data/database.db');
+    db.run(`DELETE FROM users WHERE id = ?`, [userId], (error) => {
+        if (error) {
+            console.error('Error deleting user:', error.message);
+            db.close();
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+        res.status(200).json({ message: 'User deleted successfully' });
+        db.close();
+    })
+}
+
 export const updateUsername = (req, res) => {
     const userId = req.user.id;
     const { newUsername } = req.body;

@@ -10,6 +10,7 @@ import MyRecipes from './pages/MyRecipes';
 import Favorites from './pages/Favorites'
 import Search from './pages/Search';
 import Settings from './pages/Settings';
+import ManageAccounts from './pages/ManageAccounts'
 import Overlay from './components/Overlay';
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/search/:query" element={<Search />} />
           <Route path="/settings" element={<Settings />} />
+        </Route>
+        <Route element={<AuthenticatedRoute allowedAccountTypes={['admin']} />}>
+          <Route path="/manageaccounts" element={<ManageAccounts />} />
         </Route>
       </Routes>
     </Router>

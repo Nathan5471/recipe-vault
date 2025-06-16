@@ -50,7 +50,7 @@ export default function Settings() {
 
     const handleManageAccounts = (e) => {
         e.preventDefault();
-        navigate('/manageAccounts');
+        navigate('/manageaccounts');
     }
 
     if (loading) {
