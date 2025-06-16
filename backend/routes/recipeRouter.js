@@ -68,10 +68,10 @@ router.get('/:id', (req, res) => {
     getRecipeById(req, res);
 })
 
-router.get('/all/:limit', (req, res) => {
-    const { limit } = req.params;
-    if (!limit || isNaN(limit)) {
-        return res.status(400).json({ message: 'Limit must be a valid number' });
+router.get('/all/:limit/:sortBy', (req, res) => {
+    const { limit, sortBy } = req.params;
+    if (!limit || isNaN(limit) || !sortBy) {
+        return res.status(400).json({ message: 'Limit must be a valid number and sort by is required' });
     }
     getAllRecipes(req, res);
 })

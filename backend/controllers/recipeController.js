@@ -94,9 +94,21 @@ export const getRecipeById = (req, res) => {
 }
 
 export const getAllRecipes = (req, res) => {
-    const { limit } = req.params;
+    const { limit, sortBy } = req.params;
+    let sortOptions = [];
+    if (sortBy === 'alphabeticalasc') {
+        sortOptions = ['title', 'ASC'];
+    } else if (sortBy === 'alphabeticaldesc') {
+        sortOptions = ['title', 'DESC'];
+    } else if (sortBy === 'recentasc') {
+        sortOptions = ['created_at', 'ASC'];
+    } else if (sortBy === 'recentdesc') {
+        sortOptions = ['created_at', 'DESC'];
+    } else {
+        return res.status(400).json({ message: 'Invalid sort type' });
+    }
     const db = new sqlite3.Database('data/database.db');
-    db.all(`SELECT * FROM recipes LIMIT ?`, [limit], (error, rows) => {
+    db.all(`SELECT * FROM recipes ORDER BY ${sortOptions[0]} ${sortOptions[1]} LIMIT ?`, [limit], (error, rows) => {
         if (error) {
             console.error('Error fetching recipes:', error.message);
             db.close();

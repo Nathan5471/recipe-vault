@@ -21,6 +21,13 @@ export const createRecipe = async (formData) => {
     }
 }
 
+export const getAllRecipes = async (limit = 100, sortBy = 'recentdesc') => {
+    const response = await api.get(`/all/${limit}/${sortBy}`);
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
 export const getUserRecipes = async (userId) => {
     const response = await api.get(`/user/${userId}`);
     if (response.status === 200) {
