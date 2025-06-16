@@ -18,6 +18,22 @@ app.use(cors({
 app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipeRouter);
+app.use('/images/:imageName', (req, res) => {
+    const imageName = req.params.imageName;
+    if (!imageName) {
+        return res.status(400).send('Image name is required');
+    }
+    if (imageName === 'database.db') {
+        return res.status(403).send('Access to the database file is forbidden');
+    }
+    const imagePath = `./data/${imageName}`;
+    res.sendFile(imagePath, { root: '.' }, (err) => {
+        if (err) {
+            console.error('Error sending file:', err);
+            res.status(404).send('Image not found');
+        }
+    });
+})
 app.use('/', createProxyMiddleware({
     target: 'http://localhost:5173',
     changeOrigin: true,

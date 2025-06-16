@@ -30,6 +30,7 @@ export default function setupDatabase() {
             description TEXT NOT NULL,
             ingredients TEXT NOT NULL,
             instructions TEXT NOT NULL,
+            image_url TEXT NOT NULL,
             user_id INTEGER,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

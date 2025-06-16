@@ -9,6 +9,7 @@ export default function CreateRecipe() {
     const [ingredientsLength, setIngredientsLength] = useState(1);
     const [instructions, setInstructions] = useState('');
     const [instructionsLength, setInstructionsLength] = useState(1);
+    const [image, setImage] = useState(null);
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
@@ -16,7 +17,13 @@ export default function CreateRecipe() {
         setError('');
 
         try {
-            const response = await createRecipe(title, ingredients, instructions, description);
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('ingredients', JSON.stringify(ingredients));
+            formData.append('instructions', JSON.stringify(instructions));
+            formData.append('image', image);
+            const response = await createRecipe(formData);
             if (response) {
                 alert('Recipe created successfully!');
                 setTitle('');
@@ -25,6 +32,7 @@ export default function CreateRecipe() {
                 setInstructions('');
                 setInstructionsLength(1);
                 setDescription('');
+                setImage(null);
             }
         } catch (error) {
             setError(error.message);
@@ -150,6 +158,15 @@ export default function CreateRecipe() {
                                 }}
                                 className="mt-2 p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                             >Add Instruction</button>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-2xl text-gray-700 mb-2">Image</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setImage(e.target.files[0])}
+                                className="w-full p-2 border border-gray-300 rounded-lg"
+                            />
                         </div>
                         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
                         <button

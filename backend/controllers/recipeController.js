@@ -2,9 +2,10 @@ import sqlite3 from 'sqlite3';
 
 export const createRecipe = (req, res) => {
     const { title, description, ingredients, instructions } = req.body;
+    const imagePath = req.file.path;
     const userId = req.user.id;
     const db = new sqlite3.Database('data/database.db');
-    db.run(`INSERT INTO recipes (title, description, ingredients, instructions, user_id) VALUES (?, ?, ?, ?, ?)`, [title, description, ingredients, instructions, userId], (error) => {
+    db.run(`INSERT INTO recipes (title, description, ingredients, instructions, image_url, user_id) VALUES (?, ?, ?, ?, ?, ?)`, [title, description, ingredients, instructions, imagePath, userId], (error) => {
         if (error) {
             console.error('Error inserting recipe:', error.message);
             db.close();
@@ -17,6 +18,7 @@ export const createRecipe = (req, res) => {
 
 export const updateRecipe = (req, res) => {
     const { id, title, description, ingredients, instructions } = req.body;
+    const imagePath = req.file.path.remove('data/');
     const userId = req.user.id;
     const db = new sqlite3.Database('data/database.db');
     db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
@@ -33,7 +35,7 @@ export const updateRecipe = (req, res) => {
             db.close();
             return res.status(403).json({ message: 'You do not have permission to update this recipe' });
         }
-        db.run(`UPDATE recipes SET title = ?, description = ?, ingredients = ?, instructions = ?  WHERE id = ?`, [title, ingredients, instructions, description, id], (error) => {
+        db.run(`UPDATE recipes SET title = ?, description = ?, ingredients = ?, instructions = ?, image_url = ?  WHERE id = ?`, [title, ingredients, instructions, description, imagePath, id], (error) => {
             if (error) {
                 console.error('Error updating recipe:', error.message);
                 db.close();

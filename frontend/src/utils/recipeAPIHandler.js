@@ -14,13 +14,8 @@ api.interceptors.response.use(
     }
 );
 
-export const createRecipe = async (title, ingredients, instructions, description) => {
-    const response = await api.post('/create', {
-        title,
-        ingredients,
-        instructions,
-        description
-    });
+export const createRecipe = async (formData) => {
+    const response = await api.post('/create', formData);
     if (response.status === 201) {
         return response.data;
     }

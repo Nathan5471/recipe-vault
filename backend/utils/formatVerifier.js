@@ -1,8 +1,9 @@
 export function verifyIngredients(ingredients) {
-    if (!Array.isArray(ingredients) || ingredients.length === 0) {
+    const parsedIngredients = JSON.parse(ingredients);
+    if (!Array.isArray(parsedIngredients) || parsedIngredients.length === 0) {
         return false;
     }
-    for (const ingredient of ingredients) {
+    for (const ingredient of parsedIngredients) {
         if (typeof ingredient !== 'object' || !ingredient.name || !ingredient.quantity || !ingredient.unit) {
             return false;
         }
@@ -11,10 +12,11 @@ export function verifyIngredients(ingredients) {
 }
 
 export function verifyInstructions(instructions) {
-    if (!Array.isArray(instructions) || instructions.length === 0) {
+    const parsedInstructions = JSON.parse(instructions);
+    if (!Array.isArray(parsedInstructions) || parsedInstructions.length === 0) {
         return false;
     }
-    for (const instruction of instructions) {
+    for (const instruction of parsedInstructions) {
         if (typeof instruction !== 'string' || instruction.trim() === '') {
             return false;
         }

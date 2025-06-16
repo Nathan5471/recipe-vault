@@ -2,13 +2,28 @@ import express from 'express';
 import authenticate from '../middleware/authenticate.js';
 import { createRecipe, updateRecipe, deleteRecipe, getRecipeById, getAllRecipes, searchRecipes, getUserFavorites, addRemoveFavorite, getUserRecipes } from '../controllers/recipeController.js';
 import { verifyIngredients, verifyInstructions } from '../utils/formatVerifier.js';
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'data/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+const upload = multer({ storage });
 
 const router = express.Router();
 
-router.post('/create', authenticate, (req, res) => {
+router.post('/create', authenticate, upload.single("image"), (req, res) => {
     const { title, description, ingredients, instructions } = req.body;
+    const imagePath = req.file ? req.file.path : null;
     if (!title || !description || !ingredients || !instructions) {
         return res.status(400).json({ message: 'Title, ingredients, and instructions are required' });
+    }
+    if (!imagePath) {
+        return res.status(400).json({ message: 'Image is required' });
     }
     if (!verifyIngredients(ingredients)) {
         return res.status(400).json({ message: 'Invalid ingredients format' });
