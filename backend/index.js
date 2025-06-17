@@ -5,7 +5,6 @@ import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
 import authRouter from './routes/authRouter.js';
 import recipeRouter from './routes/recipeRouter.js';
-import { nextDay } from 'date-fns';
 
 const app = express();
 const PORT = 3000;
