@@ -53,7 +53,7 @@ export const loginUser = async (req, res) => {
                 return res.status(401).json({ message: 'Invalid password' });
             }
             const token = generateToken(user.id);
-            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            res.cookie('token', token, { httpOnly: true, sameSite: 'Strict' });
             res.status(200).json({ message: 'Login successful', userId: user.id})
             db.close();
         })

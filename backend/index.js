@@ -5,6 +5,7 @@ import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
 import authRouter from './routes/authRouter.js';
 import recipeRouter from './routes/recipeRouter.js';
+import { nextDay } from 'date-fns';
 
 const app = express();
 const PORT = 3000;
@@ -34,9 +35,14 @@ app.use('/images/:imageName', (req, res) => {
         }
     });
 })
-app.use('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+app.use((req, res) => {
+    res.sendFile('./public/index.html', { root: '.' }, (err) => {
+        if (err) {
+            console.error('Error sending index file:', err);
+            res.status(404).send('Page not found');
+        }
+    });
+})
 
 try {
     app.listen(PORT, () => {
