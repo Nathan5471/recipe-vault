@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import setupDatabase from './utils/sqliteDbSetup.js';
 import generateEnv from './utils/generateEnv.js';
 import authRouter from './routes/authRouter.js';
@@ -16,6 +15,7 @@ app.use(cors({
     credentials: true,
 }))
 app.use(cookieParser());
+app.use(express.static('public'));
 app.use('/api/auth', authRouter);
 app.use('/api/recipes', recipeRouter);
 app.use('/images/:imageName', (req, res) => {
@@ -34,10 +34,9 @@ app.use('/images/:imageName', (req, res) => {
         }
     });
 })
-app.use('/', createProxyMiddleware({
-    target: 'http://localhost:5173',
-    changeOrigin: true,
-}));
+app.use('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 try {
     app.listen(PORT, () => {

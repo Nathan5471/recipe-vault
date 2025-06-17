@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  recipe-vault:
+    image: nathan5471/recipe-vault:latest
+    container_name: recipe-vault
+    ports:
+      - "3000:3000"
+    volumes:
+      - /path/to/storage:/data
+    restart: unless-stopped

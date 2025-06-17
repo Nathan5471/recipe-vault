@@ -25,9 +25,8 @@ export default function RecipeCard({ recipe, startingIsFavorite }) {
                     alt={recipe.title}
                     className="w-full h-48 object-cover rounded-t-lg mb-4"
                 />
-                <h2 className="text-2xl font-bold mb-2">{recipe.title}</h2>
                 <div className="flex flex-row justify-between items-center">
-                    <p className="text-gray-400">By ADD NAMES</p>
+                    <h2 className="text-2xl font-bold mb-2">{recipe.title}</h2>
                     <button
                         onClick={handleToggleFavorite}
                     >
