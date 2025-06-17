@@ -21,6 +21,27 @@ export const createRecipe = async (formData) => {
     }
 }
 
+export const updateRecipe = async (id, title, description, ingredients, instructions) => {
+    const response = await api.put('/update', { id, title, description, ingredients, instructions });
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
+export const deleteRecipe = async (recipeId) => {
+    const response = await api.delete(`/delete/${recipeId}`);
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
+export const getRecipe = async (recipeId) => {
+    const response = await api.get(`/${recipeId}`);
+    if (response.status === 200) {
+        return response.data;
+    }
+}
+
 export const getAmountOfRecipes = async (type, userId) => {
     if (type === 'all') {
         const response = await api.get('/amount', { params: { type } });

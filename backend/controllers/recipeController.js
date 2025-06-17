@@ -18,59 +18,82 @@ export const createRecipe = (req, res) => {
 
 export const updateRecipe = (req, res) => {
     const { id, title, description, ingredients, instructions } = req.body;
-    const imagePath = req.file.path.remove('data/');
     const userId = req.user.id;
     const db = new sqlite3.Database('data/database.db');
-    db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
+    db.get(`SELECT * FROM users WHERE id = ?`, [userId], (error, userRow) => {
         if (error) {
-            console.error('Error fetching recipe:', error.message);
+            console.error('Error fetching user:', error.message);
             db.close();
-            return 
+            return res.status(500).json({ message: 'Failed to fetch user' });
         }
-        if (!row) {
+        if (!userRow) {
             db.close();
-            return res.status(404).json({ message: 'Recipe not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
-        if (row.user_id !== userId) {
-            db.close();
-            return res.status(403).json({ message: 'You do not have permission to update this recipe' });
-        }
-        db.run(`UPDATE recipes SET title = ?, description = ?, ingredients = ?, instructions = ?, image_url = ?  WHERE id = ?`, [title, ingredients, instructions, description, imagePath, id], (error) => {
+        db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, recipeRow) => {
             if (error) {
-                console.error('Error updating recipe:', error.message);
+                console.error('Error fetching recipe:', error.message);
                 db.close();
-                return res.status(500).json({ message: 'Failed to update recipe' });
+                return res.status(500).json({ message: 'Failed to fetch recipe' });
             }
-            res.status(200).json({ message: 'Recipe updated successfully' });
-            db.close();
-        })     
+            if (!recipeRow) {
+                db.close();
+                return res.status(404).json({ message: 'Recipe not found' });
+            }
+            if (recipeRow.user_id !== userId && userRow.account_type !== 'admin') {
+                db.close();
+                return res.status(403).json({ message: 'You do not have permission to update this recipe' });
+            }
+            db.run(`UPDATE recipes SET title = ?, description = ?, ingredients = ?, instructions = ? WHERE id = ?`, [title, description, ingredients, instructions, id], (error) => {
+                if (error) {
+                    console.error('Error updating recipe:', error.message);
+                    db.close();
+                    return res.status(500).json({ message: 'Failed to update recipe' });
+                }
+                res.status(200).json({ message: 'Recipe updated successfully' });
+                db.close();
+            })
+        })
     })
 }
 
 export const deleteRecipe = (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     const userId = req.user.id;
     const db = new sqlite3.Database('data/database.db');
-    db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, row) => {
+    db.get(`SELECT * FROM users WHERE id = ?`, [userId], (error, userRow) => {
         if (error) {
-            console.error('Error fetching recipe:', error.message);
+            console.error('Error fetching user:', error.message);
             db.close();
-            return res.status(500).json({ message: 'Failed to delete recipe' });
+            return res.status(500).json({ message: 'Failed to fetch user' });
         }
-        if (!row) {
+        if (!userRow) {
             db.close();
-            return res.status(404).json({ message: 'Recipe not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
-        if (row.user_id !== userId) {
-            db.close();
-            return res.status(403).json({ message: 'You do not have permission to delete this recipe' });
-        }
-        db.run(`DELETE FROM recipes WHERE id = ?`, [id], (error) => {
+        db.get(`SELECT * FROM recipes WHERE id = ?`, [id], (error, recipeRow) => {
             if (error) {
-                console.error('Error deleting recipe:', error.message);
+                console.error('Error fetching recipe:', error.message);
                 db.close();
-                return res.status(500).json({ message: 'Failed to delete recipe' });
+                return res.status(500).json({ message: 'Failed to fetch recipe' });
             }
+            if (!recipeRow) {
+                db.close();
+                return res.status(404).json({ message: 'Recipe not found' });
+            }
+            if (recipeRow.user_id !== userId && userRow.account_type !== 'admin') {
+                db.close();
+                return res.status(403).json({ message: 'You do not have permission to delete this recipe' });
+            }
+            db.run(`DELETE FROM recipes WHERE id = ?`, [id], (error) => {
+                if (error) {
+                    console.error('Error deleting recipe:', error.message);
+                    db.close();
+                    return res.status(500).json({ message: 'Failed to delete recipe' });
+                }
+                res.status(200).json({ message: 'Recipe deleted successfully' });
+                db.close();
+            })
         })
     })
 }

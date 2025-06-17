@@ -9,6 +9,8 @@ import CreateRecipe from './pages/CreateRecipe';
 import MyRecipes from './pages/MyRecipes';
 import Favorites from './pages/Favorites';
 import AllRecipes from './pages/AllRecipes';
+import RecipeView from './pages/RecipeView';
+import EditRecipe from './pages/EditRecipe';
 import Search from './pages/Search';
 import Settings from './pages/Settings';
 import ManageAccounts from './pages/ManageAccounts';
@@ -27,6 +29,8 @@ function App() {
           <Route path="/myrecipes" element={<MyRecipes />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/all" element={<AllRecipes />} />
+          <Route path="/recipe/:recipeId" element={<RecipeView />} />
+          <Route path="/edit/:recipeId" element={<EditRecipe />} />
           <Route path="/search/:query" element={<Search />} />
           <Route path="/settings" element={<Settings />} />
         </Route>

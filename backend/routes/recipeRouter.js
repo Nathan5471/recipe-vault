@@ -48,8 +48,8 @@ router.put('/update', authenticate, (req, res) => {
     updateRecipe(req, res);
 })
 
-router.delete('/delete', authenticate, (req, res) => {
-    const { id } = req.body;
+router.delete('/delete/:id', authenticate, (req, res) => {
+    const { id } = req.params;
     if (!id) {
         return res.status(400).json({ message: 'ID is required' });
     }
