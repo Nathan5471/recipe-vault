@@ -16,19 +16,19 @@ export default function HomePage() {
         const fetchRecipes = async () => {
             try {
                 const response1 = await getFavorites();
-                if (response1.length > 5) {
-                    response1.length = 5;
+                if (response1.length > 4) {
+                    response1.length = 4;
                 }
                 const user = await getCurrentUser();
                 setUser(user)
                 if (user) {
                     const response2 = await getUserRecipes(user.id);
-                    if (response2.length > 5) {
-                        response2.length = 5;
+                    if (response2.length > 4) {
+                        response2.length = 4;
                     }
                     setMyRecipes(response2)
                 }
-                const response3 = await getAllRecipes(5, 'recent_desc');
+                const response3 = await getAllRecipes(4, 'recent_desc');
                 setFavoriteRecipes(response1)
                 setRecentRecipes(response3);
             } catch (error) {
@@ -62,7 +62,7 @@ export default function HomePage() {
                     </div>
                     
                     {favoriteRecipes.length > 0 ? (
-                        <div className="flex flex-row">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {favoriteRecipes.map(recipe => (
                                 <RecipeCard  key={recipe.id} recipe={recipe} startingIsFavorite={true}/>
                             ))}
@@ -77,7 +77,7 @@ export default function HomePage() {
                         <Link to="/myrecipes" className="ml-auto text-gray-500 hover:underline">View All</Link>
                     </div>
                     {myRecipes.length > 0 ? (
-                        <div className="flex flex-row">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {myRecipes.map(recipe => (
                                 <RecipeCard key={recipe.id} recipe={recipe} startingIsFavorite={user.favorite_recipes.includes(recipe.id)} />
                             ))}
@@ -92,7 +92,7 @@ export default function HomePage() {
                         <Link to="/all" className="ml-auto text-gray-500 hover:underline">View All</Link>
                     </div>
                     {recentRecipes.length > 0 ? (
-                        <div className="flex flex-row">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                             {recentRecipes.map(recipe => (
                                 <RecipeCard key={recipe.id} recipe={recipe} startingIsFavorite={user && user.favorite_recipes.includes(recipe.id)} />
                             ))}
